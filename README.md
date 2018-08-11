@@ -5,14 +5,14 @@ Countries available: 39
 Some questions to answer are
 
 Plan:
-1. Load data in two tables, one holds population data, second holds internet and smartphone data
+1. Load data in two tables, one holds population data, second holds social media and smartphone data
 2. Merge two tables
 3. Use CASE to divide data by regions
 4. Group by regions
 5. Create partitions
 
 Population data was taken from [World Bank](https://data.worldbank.org/indicator/SP.POP.TOTL)
-Data about smartphone and Internet usage was taken from [Pew Research Center](http://www.pewglobal.org/2018/06/19/social-media-use-continues-to-rise-in-developing-countries-but-plateaus-across-developed-ones/)
+Data about smartphone and social media usage was taken from [Pew Research Center](http://www.pewglobal.org/2018/06/19/social-media-use-continues-to-rise-in-developing-countries-but-plateaus-across-developed-ones/)
 
 **Subset of population data**
 
