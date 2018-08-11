@@ -1,4 +1,4 @@
-# Find regions of the world with highest usage of smartphones, social media and internet in 2016 and 2017 with Hive
+# Find regions of the world with highest usage of smartphones and social media in 2016 and 2017 with Hive
 Aggregating, merging datasets, creating partitions in Hive to analyze the state of smartphones and Internet across countries of the world  
 Countries available: 39
 
@@ -151,7 +151,7 @@ LIMIT 10;
 >Chile   2016    0.78    0.65    0.66    17909754        Latin America <br>
 >Chile   2017    0.78    0.72    0.63    18054726        Latin America <br>
 
-**Top-3 continents with highest average rating of smartphone ownership in 2016 and 2017 and region with highest difference (the one that develops the fastest)**
+## Top-3 continents with highest average rating of smartphone ownership in 2016 and 2017 and region with highest difference (the one that develops the fastest)
 
 ```
 CREATE TABLE smart_2017 as 
@@ -164,5 +164,109 @@ SELECT continent, round(smartphone_own_avg, 3) as rounded_smart FROM continent_g
 WHERE year = '2016'
 SORT BY rounded_smart DESC;
 
+SELECT continent, rounded_smart FROM smart_2016
+SORT BY rounded_smart DESC
+LIMIT 3;
+
+SELECT continent, rounded_smart FROM smart_2017
+SORT BY rounded_smart DESC
+LIMIT 3;
 ```
 
+**In 2016**
+
+|Continent|% of people who owns smartphones on average|
+| ------------- | ------------- |
+North America   |0.72|
+Europe  |0.626|
+|Middle East     |0.496|
+
+**In 2017**
+
+|Continent|% of people who owns smartphones on average|
+| ------------- | ------------- |
+|North America|   0.74|
+|Europe|  0.675|
+|Middle East|     0.67|
+
+**Differece between years**
+
+```
+CREATE TABLE merged_smart as 
+SELECT s.continent, s.rounded_smart as data_2016, d.rounded_smart as data_2017
+FROM smart_2016 s INNER JOIN smart_2017 d
+ON s.continent = d.continent;
+
+SELECT continent, round(data_2017-data_2016, 3) as diff FROM merged_smart
+SORT BY diff DESC;
+```
+
+|Continent|% of change from 16 to 17|
+| ------------- | ------------- |
+|Middle East |    0.174|
+|Latin America |  0.117|
+|Africa|  0.088|
+
+In summary, the same 3 continents were leaders in number of people who owns smartphones in both 2016 and 2017 - North America, Europa, Middle East. As of continents that develops the fastest, Middle East, Latin America and Africa have the highest development rate.
+
+
+## Top-3 continents with highest average rating of social media in 2016 and 2017 and region with highest difference (the one that develops the fastest)
+
+```
+CREATE TABLE sm_2017 as 
+SELECT continent, round(social_media_usage_avg, 3) as rounded_sm FROM continent_group
+WHERE year = '2017'
+SORT BY rounded_sm DESC;
+
+CREATE TABLE sm_2016 as 
+SELECT continent, round(social_media_usage_avg, 3) as rounded_sm FROM continent_group
+WHERE year = '2016'
+SORT BY rounded_sm DESC;
+
+SELECT continent, rounded_sm FROM sm_2017
+SORT BY rounded_sm DESC
+LIMIT 3;
+
+SELECT continent, rounded_sm FROM sm_2016
+SORT BY rounded_sm DESC
+LIMIT 3;
+```
+
+**In 2016**
+
+|Continent|% of people who uses social medias on average|
+| ------------- | ------------- |
+|North America|   0.67|
+|Europe | 0.557|
+|Middle East  |   0.546|
+
+**In 2017**
+
+|Continent|% of people who uses social medias on average|
+| ------------- | ------------- |
+|North America  | 0.685|
+|Middle East  |   0.632|
+|Latin America |  0.581|
+
+
+
+**Differece between years**
+
+```
+CREATE TABLE merged_sm as 
+SELECT s.continent, s.rounded_sm as data_2016, d.rounded_sm as data_2017
+FROM sm_2016 s INNER JOIN sm_2017 d
+ON s.continent = d.continent;
+
+SELECT continent, round(data_2017-data_2016, 3) as diff FROM merged_sm
+SORT BY diff DESC;
+```
+|Continent|% of change from 16 to 17|
+| ------------- | ------------- |
+|Middle East|     0.086|
+|Africa|  0.065|
+|Latin America|   0.061|
+
+
+
+In summary, the same 3 continents were leaders in number of people who owns smartphones in both 2016 and 2017 - North America, Europa, Middle East. As of continents that develops the fastest, Middle East, Latin America and Africa have the highest development rate.
