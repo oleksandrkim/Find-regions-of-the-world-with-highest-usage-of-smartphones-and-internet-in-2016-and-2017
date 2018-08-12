@@ -2,8 +2,6 @@
 Aggregating, merging datasets, creating partitions in Hive to analyze the state of smartphones and Internet across countries of the world  
 Countries available: 39
 
-Some questions to answer are
-
 Plan:
 1. Load data in two tables, one holds population data, second holds social media and smartphone data
 2. Merge two tables
