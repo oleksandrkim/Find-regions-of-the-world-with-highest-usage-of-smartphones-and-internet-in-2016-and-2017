@@ -280,7 +280,7 @@ SORT BY diff DESC;
 
 In summary, North America and Middle East were leaders in number of people who uses social media in both 2016 and 2017. In contrast, Latin America managed to get 3rd place in 2017, taking a position of Europe which lost its' second place in 2017. As of continents that develops the fastest, Middle East, Latin America and Africa have the fastest spread of social media.
 
-**Create partitions to better store data** <br>
+**Create partitions to store data by continents** <br>
 Number of continents is not huge, so "dynamic partitioning" can be applied
 
 ```
