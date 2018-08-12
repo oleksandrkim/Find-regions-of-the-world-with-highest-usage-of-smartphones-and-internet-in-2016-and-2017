@@ -1,4 +1,4 @@
-# Find regions of the world with highest usage of smartphones and social media in 2016 and 2017 with Hive
+# Find regions of the world with the highest usage of smartphones and social media in 2016 and 2017 with Hive
 Aggregating, merging datasets, creating partitions in Hive to analyze the state of smartphones and Internet across countries of the world  
 Countries available: 39
 
