@@ -53,7 +53,8 @@ social_media_usage FLOAT,
 year INT)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 LOCATION '/user/hirwuser864/internet_data'
-TBLPROPERTIES ('creator'='me', 'created_on' = '2018-08-10', 'description'='This table holds internet data', "skip.header.line.count"="1");
+TBLPROPERTIES ('creator'='me', 'created_on' = '2018-08-10',
+  'description'='This table holds internet data', "skip.header.line.count"="1");
 
 SELECT * FROM internet_data
 LIMIT 10;
@@ -78,7 +79,8 @@ year INT,
 Population INT)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 LOCATION '/user/hirwuser864/population_data'
-TBLPROPERTIES ('creator'='me', 'created_on' = '2018-08-10', 'description'='This table holds population data', "skip.header.line.count"="1");
+TBLPROPERTIES ('creator'='me', 'created_on' = '2018-08-10',
+  'description'='This table holds population data', "skip.header.line.count"="1");
 
 SELECT * FROM population_data
 LIMIT 10;
@@ -127,11 +129,16 @@ CREATE TABLE merge_continent as
 SELECT *,
 CASE
 WHEN country in ( 'United States', 'Canada')  THEN 'North America'
-WHEN country in ( 'France', 'Germany', 'Greece', 'Hungary', 'Italy', 'Netherlands', 'Poland', 'Spain', 'Sweden', 'United Kingdom', 'Russia')  THEN 'Europe'
-WHEN country in ('Australia', 'China', 'India', 'Indonesia', 'Japan', 'Philippines', 'South Korea', 'Vietnam')  THEN 'Asia'
+WHEN country in ( 'France', 'Germany', 'Greece', 'Hungary', 
+  'Italy', 'Netherlands', 'Poland', 'Spain', 'Sweden', 
+  'United Kingdom', 'Russia')  THEN 'Europe'
+WHEN country in ('Australia', 'China', 'India', 'Indonesia', 
+  'Japan', 'Philippines', 'South Korea', 'Vietnam')  THEN 'Asia'
 WHEN country in ('Israel', 'Jordan', 'Lebanon', 'Tunisia', 'Turkey')  THEN 'Middle East'
-WHEN country in ('Ghana', 'Kenya', 'Nigeria', 'Senegal', 'South Africa', 'Tanzania')  THEN 'Africa'
-WHEN country in ('Argentina', 'Brazil', 'Chile', 'Colombia', 'Mexico', 'Peru', 'Venezuela')  THEN 'Latin America'
+WHEN country in ('Ghana', 'Kenya', 'Nigeria', 'Senegal', 
+  'South Africa', 'Tanzania')  THEN 'Africa'
+WHEN country in ('Argentina', 'Brazil', 'Chile', 'Colombia', 
+  'Mexico', 'Peru', 'Venezuela')  THEN 'Latin America'
 ELSE null 
 END AS continent
 FROM merged_i_p;
@@ -174,6 +181,8 @@ LIMIT 3;
 ```
 
 **In 2016**
+
+0.72 = 72%
 
 |Continent|% of people who owns smartphones on average|
 | ------------- | ------------- |
@@ -269,4 +278,37 @@ SORT BY diff DESC;
 
 
 
-In summary, the same 3 continents were leaders in number of people who owns smartphones in both 2016 and 2017 - North America, Europa, Middle East. As of continents that develops the fastest, Middle East, Latin America and Africa have the highest development rate.
+In summary, North America and Middle East were leaders in number of people who uses social media in both 2016 and 2017. In contrast, Latin America managed to get 3rd place in 2017, taking a position of Europe which lost its' second place in 2017. As of continents that develops the fastest, Middle East, Latin America and Africa have the fastest spread of social media.
+
+**Create partitions to better store data** <br>
+Number of continents is not huge, so "dynamic partitioning" can be applied
+
+```
+SET hive.exec.dynamic.partition.mode=nonstrict;
+INSERT OVERWRITE TABLE merged_partition_dynamic
+PARTITION (cont)
+SELECT m.*, m.continent
+FROM merge_continent m;
+
+SHOW PARTITIONS merged_partition_dynamic;
+```
+
+>cont=Africa <br>
+>cont=Asia <br>
+>cont=Europe <br>
+>cont=Latin America <br>
+>cont=Middle East <br>
+>cont=North America <br>
+
+```
+SELECT * FROM merged_partition_dynamic
+WHERE cont='Europe'
+LIMIT 5;
+```
+
+>Germany 2016    0.85    0.66    0.37    82348669        Europe  Europe<br>
+>Germany 2017    0.87    0.72    0.4     82695000        Europe  Europe<br>
+>Spain   2016    0.9     0.79    0.63    46484062        Europe  Europe<br>
+>Spain   2017    0.87    0.79    0.59    46572028        Europe  Europe<br>
+>France  2016    0.81    0.58    0.48    66859768        Europe  Europe<br>
+
