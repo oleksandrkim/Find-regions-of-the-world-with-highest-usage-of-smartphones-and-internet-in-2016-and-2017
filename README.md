@@ -19,7 +19,7 @@ Data about smartphone and social media usage was taken from [Pew Research Center
 | -------|----|----------|
 |Aruba|2016|104822|
 |Aruba|2017|105264|
-|Afghanistan|2016|34656032||
+|Afghanistan|2016|34656032|
 |Afghanistan|2017|35530081|
 
 
